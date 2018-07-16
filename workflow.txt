@@ -1,0 +1,110 @@
+------ Dependencies -------
+
+vimrc
+tmux
+pip
+virtualenv
+git
+linux
+
+
+----- Workflow -----
+
+* .vimrc
+* Vundle plugin manager
+	* To install plugins in vim type :PluginInstall
+* .bashrc
+* .bash_profile
+	* source .bashrc here for tmux
+* .bash_aliases
+* Install tmux
+* Setup .tmux.conf
+* Setup .tmux-dev
+* Install tpm (https://github.com/tmux-plugins/tpm)
+
+
+----- tmux commands ------
+Type 'tmux' in terminal to start a session.
+Ctrl+b ? - Help
+
+Alt+Arrow            switch pane.
+Ctrl+b D             auto setup terminals.
+Ctrl+b z             go full screen, return to original size
+Ctrl+b " —        split pane horizontally.
+Ctrl+b % —        split pane vertically.
+Ctrl+b arrow key —switch pane.
+Ctrl+b c —        (c)reate a new window.
+Ctrl+b n —        move to the (n)ext window.
+Ctrl+b p —        move to the (p)revious window.
+Ctrl+b ,             rename window.
+Ctrl+d               exit a pane
+Hold Ctrl+b and hold one of the arrow keys resize pane.
+
+After modifying .tmux.conf, remember to source it:
+
+	tmux source-file .tmux.conf
+
++ Session Management +
+Ctrl+b d    detach current session
+
+To reattach, get a list of detached sessions first:
+
+   tmux ls
+
+Example output:
+
+   0: 2 windows (created Sat Aug 15 17:55:34 2015) [199x44] (detached)
+
+Reattach:
+
+   tmux attach -t 0
+
+Assign a name when creating a session for easier attaching:
+
+   tmux new -s foobar
+
+Then reattach with:
+
+   tmux attach -t foobar
+
+Also, you can rename a session:
+
+   tmux rename-session -t 0 database
+
++ Change the default prefix +
+
+	unbind C-b
+	set -g prefix C-a
+
++ Pane switching with Alt+arrow +
+
+	bind -n M-Left select-pane -L
+	bind -n M-Right select-pane -R
+	bind -n M-Up select-pane -U
+	bind -n M-Down select-pane -D
+
++ Activity Monitoring +
+
+   setw -g monitor-activity on
+   set -g visual-activity on
+
++ Highlighting Current Window Using Specified Colour +
+
+   set-window-option -g window-status-current-bg yellow
+
++ Pane Switching Using Mouse +
+
+   set-option -g mouse-select-pane on
+
++ Scripting tmux +
+
+Save commands in a separate file, e.g. .tmux-dev. In order to be able to run it, you should point to it from the .tmux.conf file:
+
+   bind D source-file ~/.tmux-dev
+
+From now on, pressing the prefix (Ctrl+b) followed by D (it¿s an uppercase character in this example, so Shift is required) will execute commands located in the .tmux-dev file.
+
+You can also run commands from .tmux-dev:
+
+   # split current pane and run 'vim' command inside the new one
+   splitw -h -p 50 'vim'
